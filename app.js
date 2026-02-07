@@ -27,8 +27,6 @@ const userAvatar = document.getElementById('user-avatar');
 const currentDateDisplay = document.getElementById('current-date-display');
 const prevDayBtn = document.getElementById('prev-day');
 const nextDayBtn = document.getElementById('next-day');
-const calendarBtn = document.getElementById('calendar-btn');
-const datePicker = document.getElementById('date-picker');
 
 // Тема
 function applyTheme() {
@@ -73,17 +71,6 @@ prevDayBtn.onclick = () => {
 
 nextDayBtn.onclick = () => {
     currentDate.setDate(currentDate.getDate() + 1);
-    updateDateDisplay();
-    renderCurrentSection();
-};
-
-calendarBtn.onclick = () => {
-    datePicker.value = getCurrentDateStr();
-    datePicker.showPicker ? datePicker.showPicker() : datePicker.click();
-};
-
-datePicker.onchange = (e) => {
-    currentDate = new Date(e.target.value);
     updateDateDisplay();
     renderCurrentSection();
 };
@@ -170,7 +157,7 @@ document.getElementById('add-task-btn').onclick = () => {
     }
 };
 
-// Привычки (оставлено как было, с текущей датой)
+// Привычки
 function renderHabits() {
     const list = document.getElementById('habits-list');
     const todayStr = getCurrentDateStr();
@@ -225,50 +212,4 @@ function deleteHabit(index) {
     if (confirm('Удалить привычку?')) {
         habits.splice(index, 1);
         saveData();
-        renderHabits();
-    }
-}
-
-function editHabit(index) {
-    const newName = prompt('Новое название', habits[index].name);
-    if (newName) {
-        habits[index].name = newName;
-        saveData();
-        renderHabits();
-    }
-}
-
-document.getElementById('add-habit-btn').onclick = () => {
-    const name = prompt('Название привычки');
-    if (name) {
-        habits.push({ name, completions: [] });
-        saveData();
-        renderHabits();
-    }
-};
-
-// Вкладки
-document.querySelectorAll('.tab').forEach(tab => {
-    tab.onclick = () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(tab.dataset.section + '-section').classList.add('active');
-        renderCurrentSection();
-    };
-});
-
-function renderCurrentSection() {
-    const active = document.querySelector('.tab.active').dataset.section;
-    if (active === 'tasks') renderTasks();
-    if (active === 'habits') renderHabits();
-    // goals и stats оставлены как были
-}
-
-// Инициализация
-setupAvatar();
-updateDateDisplay();
-renderCurrentSection();
-
-Telegram.WebApp.ready();
-Telegram.WebApp.expand();
+        renderHabits

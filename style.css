@@ -33,7 +33,7 @@ body {
 .container { 
     max-width: 480px; 
     margin: 0 auto; 
-    padding: 20px; 
+    padding: 20px 20px env(safe-area-inset-bottom); /* адаптация под смартфоны */
     display: flex; 
     flex-direction: column; 
     height: 100dvh; 
@@ -80,7 +80,7 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 40px; /* больше места для touch на смартфонах */
     margin: 20px 0;
     font-size: 19px;
     color: var(--text);
@@ -95,13 +95,9 @@ h1 {
 .date-btn {
     background: none;
     border: none;
-    font-size: 28px;
+    font-size: 32px; /* крупнее для touch */
     cursor: pointer;
-    padding: 0 10px;
-}
-
-#calendar-btn {
-    color: var(--accent);
+    padding: 10px;
 }
 
 .card {
@@ -150,9 +146,10 @@ h1 {
     margin: 20px 0 40px;
     cursor: pointer;
     box-shadow: 0 4px 10px var(--shadow);
+    min-height: 56px; /* лучше для touch */
 }
 
-#tasks-list {
+#tasks-list, #habits-list, #goals-list {
     width: 90%;
     max-width: 400px;
     margin-top: 10px;
@@ -167,12 +164,13 @@ ul {
 li {
     background: var(--card-bg);
     border-radius: 16px;
-    padding: 16px 20px;
+    padding: 20px; /* больше для touch */
     margin-bottom: 12px;
     box-shadow: 0 2px 8px var(--shadow);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    min-height: 60px;
 }
 
 li.completed .item-text {
@@ -187,8 +185,8 @@ li.completed .item-text {
 }
 
 .task-checkbox, .habit-checkbox {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     border: 3px solid #666;
     cursor: pointer;
@@ -204,7 +202,7 @@ li.completed .item-text {
 .task-checkbox.checked::after, .habit-checkbox.checked::after {
     content: '✓';
     color: white;
-    font-size: 24px;
+    font-size: 28px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -215,9 +213,9 @@ li.completed .item-text {
     background: none;
     border: none;
     color: #ff4444;
-    font-size: 24px;
+    font-size: 28px;
     cursor: pointer;
-    padding: 0 8px;
+    padding: 10px;
 }
 
 .tabs { 
@@ -227,6 +225,7 @@ li.completed .item-text {
     padding: 8px; 
     box-shadow: 0 4px 12px var(--shadow); 
     margin-top: auto; 
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 .tab { 
@@ -235,7 +234,7 @@ li.completed .item-text {
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    padding: 10px;
+    padding: 12px; /* больше для touch */
     border: none; 
     background: transparent; 
     font-size: 13px; 
@@ -246,7 +245,6 @@ li.completed .item-text {
 }
 
 .tab.active { 
-    background: transparent;
     color: var(--accent); 
     font-weight: bold; 
 }
@@ -264,4 +262,4 @@ li.completed .item-text {
 
 .progress-section { 
     display: none; 
-} /* скрываем старый прогресс-бар в задачах */
+}

@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MASK HABIT</title>
     
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -22,11 +22,8 @@
                 <button id="prev-day" class="date-btn">◀</button>
                 <span id="current-date-display">Сегодня</span>
                 <button id="next-day" class="date-btn">▶</button>
-                <button id="calendar-btn" class="date-btn">📅</button>
             </div>
         </header>
-
-        <input type="date" id="date-picker" style="display: none;">
 
         <main id="main-content">
             <!-- Задачи (главная вкладка) -->
@@ -49,7 +46,7 @@
                         <div id="habits-progress-fill" style="width: 0%"></div>
                     </div>
                 </div>
-                <button id="add-habit-btn" class="main-button">+ Добавить привычку</button>
+                <button id="add-habit-btn" class="main-button big">+ Добавить привычку</button>
                 <ul id="habits-list"></ul>
             </section>
 
@@ -58,7 +55,7 @@
                 <div class="progress-section">
                     <h2>Цели на год</h2>
                 </div>
-                <button id="add-goal-btn" class="main-button">+ Добавить цель</button>
+                <button id="add-goal-btn" class="main-button big">+ Добавить цель</button>
                 <ul id="goals-list"></ul>
             </section>
 
