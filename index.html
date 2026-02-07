@@ -26,7 +26,7 @@
         </header>
 
         <main id="main-content">
-            <!-- Задачи (главная вкладка) -->
+            <!-- Задачи -->
             <section id="tasks-section" class="section active">
                 <div class="tasks-center">
                     <div class="card" id="tasks-card">
@@ -40,40 +40,44 @@
 
             <!-- Привычки -->
             <section id="habits-section" class="section">
-                <div class="progress-section">
-                    <div id="habits-progress-text">0 из 0 выполнено</div>
-                    <div class="progress-bar">
-                        <div id="habits-progress-fill" style="width: 0%"></div>
+                <div class="tasks-center">
+                    <div class="card" id="habits-card">
+                        <div id="habits-progress-big">0 / 0</div>
+                        <div id="habits-empty" class="empty-message">Привычек нет</div>
                     </div>
+                    <button id="add-habit-btn" class="main-button big">+ Добавить привычку</button>
+                    <ul id="habits-list"></ul>
                 </div>
-                <button id="add-habit-btn" class="main-button big">+ Добавить привычку</button>
-                <ul id="habits-list"></ul>
             </section>
 
             <!-- Цели на год -->
             <section id="goals-section" class="section">
-                <div class="progress-section">
-                    <h2>Цели на год</h2>
+                <div class="tasks-center">
+                    <button id="add-goal-btn" class="main-button big">+ Добавить цель</button>
+                    <ul id="goals-list"></ul>
+                    <div id="goals-empty" class="empty-message" style="display: none;">Целей нет</div>
                 </div>
-                <button id="add-goal-btn" class="main-button big">+ Добавить цель</button>
-                <ul id="goals-list"></ul>
             </section>
 
             <!-- Аналитика -->
             <section id="stats-section" class="section">
-                <div class="progress-section">
-                    <h2>Аналитика</h2>
-                    <div id="stats-summary"></div>
+                <div class="period-selector">
+                    <button class="period-btn active" data-period="day">День</button>
+                    <button class="period-btn" data-period="week">Неделя</button>
+                    <button class="period-btn" data-period="month">Месяц</button>
+                    <button class="period-btn" data-period="year">Год</button>
                 </div>
-                <canvas id="habits-pie-chart" height="200"></canvas>
+                <div id="stats-summary" class="stats-summary">Статистика загружается…</div>
                 <canvas id="habits-line-chart" height="200"></canvas>
+                <canvas id="tasks-line-chart" height="200"></canvas>
+                <canvas id="habits-pie-chart" height="200"></canvas>
             </section>
         </main>
 
         <div class="tabs">
             <button class="tab active" data-section="tasks">📝 Задачи</button>
             <button class="tab" data-section="habits">✔️ Привычки</button>
-            <button class="tab" data-section="goals">🎯 Цели на год</button>
+            <button class="tab" data-section="goals">🎯 Цели</button>
             <button class="tab" data-section="stats">📊 Аналитика</button>
         </div>
     </div>
