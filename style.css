@@ -5,19 +5,15 @@
     --accent: #4285f4;
     --progress: #4285f4;
     --shadow: rgba(0,0,0,0.1);
-    --tab-bg: #f0f0f0;
-    --tab-text: #888;
 }
 
 body.dark {
     --bg-gradient: linear-gradient(to bottom, #121212, #1e1e1e);
     --text: #e0e0e0;
-    --card-bg: #2d2d2d;
-    --accent: #4285f4; /* ярко-синий даже в тёмной теме, как на скриншоте */
+    --card-bg: #333333; /* чуть светлее для лучшего контраста */
+    --accent: #4285f4;
     --progress: #4285f4;
-    --shadow: rgba(0,0,0,0.4);
-    --tab-bg: #1e1e1e;
-    --tab-text: #aaa;
+    --shadow: rgba(0,0,0,0.5);
 }
 
 body { 
@@ -33,12 +29,12 @@ body {
 .container { 
     max-width: 480px; 
     margin: 0 auto; 
-    padding: 0 20px env(safe-area-inset-bottom);
+    padding: 0 20px 80px 20px; /* место под фиксированные табы */
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
     display: flex; 
     flex-direction: column; 
     height: 100dvh; 
     box-sizing: border-box; 
-    position: relative; /* для фиксированных табов */
 }
 
 header { 
@@ -74,14 +70,13 @@ h1 {
     height: 36px;
     border-radius: 50%;
     object-fit: cover;
-    margin-left: 10px;
 }
 
 .date-nav {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 40px;
     margin: 15px 0;
     font-size: 17px;
     color: var(--text);
@@ -96,16 +91,19 @@ h1 {
 .date-btn {
     background: none;
     border: none;
-    font-size: 28px;
+    font-size: 30px;
     cursor: pointer;
     padding: 10px;
-    color: var(--accent); /* синие стрелки как на скриншоте */
+    color: var(--accent); /* синие стрелки */
 }
+
+/* Более похожие на скриншот стрелки */
+/* Если хочешь точные треугольники, можно заменить в HTML на &#9668; и &#9658; */
 
 .card {
     background: var(--card-bg);
-    border-radius: 30px; /* чуть меньше */
-    padding: 30px 20px; /* сильно уменьшил отступы */
+    border-radius: 30px;
+    padding: 30px 20px;
     box-shadow: 0 8px 20px var(--shadow);
     display: flex;
     flex-direction: column;
@@ -116,17 +114,21 @@ h1 {
 }
 
 #tasks-progress-big {
-    font-size: 36px; /* уменьшил с 48px */
+    font-size: 36px;
     font-weight: bold;
     color: var(--text);
     margin-bottom: 10px;
 }
 
 .empty-message {
-    font-size: 18px; /* уменьшил */
-    color: #999;
+    font-size: 18px;
+    color: #aaa; /* ярче в тёмной теме */
     margin: 10px 0 0;
     text-align: center;
+}
+
+body.dark .empty-message {
+    color: #ccc; /* ещё ярче в тёмной */
 }
 
 .tasks-center {
@@ -136,14 +138,14 @@ h1 {
     justify-content: flex-start;
     flex-grow: 1;
     padding: 10px 0;
-    overflow-y: auto; /* только этот блок скроллится */
+    overflow-y: auto;
 }
 
 .main-button.big {
     background: var(--accent);
     color: white;
     font-size: 18px;
-    padding: 14px 40px; /* уменьшил */
+    padding: 14px 40px;
     border: none;
     border-radius: 50px;
     margin: 15px 0 20px;
@@ -167,17 +169,17 @@ ul {
 li {
     background: var(--card-bg);
     border-radius: 14px;
-    padding: 14px 16px; /* уменьшил padding */
+    padding: 14px 16px;
     margin-bottom: 10px;
     box-shadow: 0 2px 6px var(--shadow);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 50px; /* уменьшил */
+    min-height: 50px;
 }
 
 .item-text { 
-    font-size: 17px; /* чуть меньше */
+    font-size: 17px; 
     flex: 1; 
 }
 
@@ -197,42 +199,45 @@ li {
     padding: 8px;
 }
 
-/* Фиксированные табы внизу — всегда видны */
+/* Нижние табы — теперь как на скриншоте: отдельные rounded кнопки с тенью */
 .tabs { 
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    max-width: 480px;
-    margin: 0 auto;
-    background: var(--tab-bg); 
-    border-radius: 16px 16px 0 0;
-    padding: 8px 20px env(safe-area-inset-bottom);
-    box-shadow: 0 -4px 12px var(--shadow); 
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 20px calc(10px + env(safe-area-inset-bottom));
+    background: transparent; /* прозрачный фон панели */
     z-index: 10;
 }
 
 .tab { 
-    flex: 1; 
+    background: var(--card-bg);
+    border-radius: 30px;
+    padding: 12px 20px;
+    box-shadow: 0 4px 12px var(--shadow);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 6px;
-    padding: 10px;
     font-size: 12px;
+    color: var(--text);
+    min-width: 80px;
+    transition: all 0.2s;
 }
 
 .tab.active { 
-    color: var(--accent); 
-    font-weight: bold; 
+    background: var(--accent);
+    color: white;
+    font-weight: bold;
 }
 
 .section { 
     display: none; 
     flex-direction: column; 
     flex-grow: 1; 
-    overflow-y: hidden; /* основной скролл только в tasks-center */
-    padding-bottom: 80px; /* место под фиксированные табы */
+    overflow-y: hidden;
 }
 
 .section.active { 
