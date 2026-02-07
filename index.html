@@ -50,7 +50,7 @@
                 </div>
             </section>
 
-            <!-- Цели на год -->
+            <!-- Цели -->
             <section id="goals-section" class="section">
                 <div class="tasks-center">
                     <button id="add-goal-btn" class="main-button big">+ Добавить цель</button>
@@ -67,9 +67,15 @@
                     <button class="period-btn" data-period="month">Месяц</button>
                     <button class="period-btn" data-period="year">Год</button>
                 </div>
-                <div id="stats-summary" class="stats-summary">Статистика загружается…</div>
-                <canvas id="habits-line-chart" height="200"></canvas>
-                <canvas id="tasks-line-chart" height="200"></canvas>
+                <div id="stats-summary" class="stats-summary"></div>
+
+                <h3 class="chart-title">Привычки (выполнено / пропущено)</h3>
+                <canvas id="habits-bar-chart" height="200"></canvas>
+
+                <h3 class="chart-title">Задачи (выполнено / пропущено)</h3>
+                <canvas id="tasks-bar-chart" height="200"></canvas>
+
+                <h3 class="chart-title">Общий процент выполненных привычек</h3>
                 <canvas id="habits-pie-chart" height="200"></canvas>
             </section>
         </main>

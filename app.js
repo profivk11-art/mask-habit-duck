@@ -194,45 +194,39 @@ function renderGoals() {
 
 // === Добавление ===
 const addTaskBtn = document.getElementById('add-task-btn');
-if (addTaskBtn) {
-    addTaskBtn.addEventListener('click', () => {
-        const name = prompt('Название задачи');
-        if (name && name.trim() !== '') {
-            tasks.push({ name: name.trim(), completions: [] });
-            saveData();
-            renderTasks();
-            renderCurrentSection();
-        }
-    });
-}
+if (addTaskBtn) addTaskBtn.addEventListener('click', () => {
+    const name = prompt('Название задачи');
+    if (name && name.trim()) {
+        tasks.push({ name: name.trim(), completions: [] });
+        saveData();
+        renderTasks();
+        renderCurrentSection();
+    }
+});
 
 const addHabitBtn = document.getElementById('add-habit-btn');
-if (addHabitBtn) {
-    addHabitBtn.addEventListener('click', () => {
-        const name = prompt('Название привычки');
-        if (name && name.trim() !== '') {
-            habits.push({ name: name.trim(), completions: [] });
-            saveData();
-            renderHabits();
-            renderCurrentSection();
-        }
-    });
-}
+if (addHabitBtn) addHabitBtn.addEventListener('click', () => {
+    const name = prompt('Название привычки');
+    if (name && name.trim()) {
+        habits.push({ name: name.trim(), completions: [] });
+        saveData();
+        renderHabits();
+        renderCurrentSection();
+    }
+});
 
 const addGoalBtn = document.getElementById('add-goal-btn');
-if (addGoalBtn) {
-    addGoalBtn.addEventListener('click', () => {
-        const name = prompt('Название цели');
-        if (name && name.trim() !== '') {
-            goals.push({ name: name.trim() });
-            saveData();
-            renderGoals();
-            renderCurrentSection();
-        }
-    });
-}
+if (addGoalBtn) addGoalBtn.addEventListener('click', () => {
+    const name = prompt('Название цели');
+    if (name && name.trim()) {
+        goals.push({ name: name.trim() });
+        saveData();
+        renderGoals();
+        renderCurrentSection();
+    }
+});
 
-// === Toggle ===
+// === Toggle, Edit, Delete ===
 function toggleTask(index) {
     const todayStr = getCurrentDateStr();
     if (!tasks[index].completions) tasks[index].completions = [];
@@ -255,10 +249,9 @@ function toggleHabit(index) {
     renderCurrentSection();
 }
 
-// === Редактирование и удаление ===
 function editTask(index) {
-    const newName = prompt('Новое название задачи', tasks[index].name);
-    if (newName && newName.trim() !== '') {
+    const newName = prompt('Новое название', tasks[index].name);
+    if (newName && newName.trim()) {
         tasks[index].name = newName.trim();
         saveData();
         renderTasks();
@@ -267,7 +260,7 @@ function editTask(index) {
 }
 
 function deleteTask(index) {
-    if (confirm('Удалить задачу?')) {
+    if (confirm('Удалить?')) {
         tasks.splice(index, 1);
         saveData();
         renderTasks();
@@ -276,8 +269,8 @@ function deleteTask(index) {
 }
 
 function editHabit(index) {
-    const newName = prompt('Новое название привычки', habits[index].name);
-    if (newName && newName.trim() !== '') {
+    const newName = prompt('Новое название', habits[index].name);
+    if (newName && newName.trim()) {
         habits[index].name = newName.trim();
         saveData();
         renderHabits();
@@ -286,7 +279,7 @@ function editHabit(index) {
 }
 
 function deleteHabit(index) {
-    if (confirm('Удалить привычку?')) {
+    if (confirm('Удалить?')) {
         habits.splice(index, 1);
         saveData();
         renderHabits();
@@ -295,8 +288,8 @@ function deleteHabit(index) {
 }
 
 function editGoal(index) {
-    const newName = prompt('Новое название цели', goals[index].name);
-    if (newName && newName.trim() !== '') {
+    const newName = prompt('Новое название', goals[index].name);
+    if (newName && newName.trim()) {
         goals[index].name = newName.trim();
         saveData();
         renderGoals();
@@ -305,7 +298,7 @@ function editGoal(index) {
 }
 
 function deleteGoal(index) {
-    if (confirm('Удалить цель?')) {
+    if (confirm('Удалить?')) {
         goals.splice(index, 1);
         saveData();
         renderGoals();
@@ -313,10 +306,14 @@ function deleteGoal(index) {
     }
 }
 
-// === Переключение вкладок ===
+// === Переключение вкладок (исправлено для надёжной работы) ===
 const tabs = document.querySelectorAll('.tab');
 tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
+    tab.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Клик по нижнему табу:', tab.dataset.section); // для дебага
+
         tabs.forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
 
@@ -348,15 +345,10 @@ function getDatesInPeriod(period) {
     const end = new Date();
     let start = new Date();
 
-    if (period === 'day') {
-        start.setDate(end.getDate() - 6); // 7 дней
-    } else if (period === 'week') {
-        start.setDate(end.getDate() - 28); // 4 недели
-    } else if (period === 'month') {
-        start.setMonth(end.getMonth() - 5); // 6 месяцев
-    } else if (period === 'year') {
-        start.setFullYear(end.getFullYear() - 1);
-    }
+    if (period === 'day') start.setDate(end.getDate() - 6);
+    else if (period === 'week') start.setDate(end.getDate() - 28);
+    else if (period === 'month') start.setMonth(end.getMonth() - 5);
+    else if (period === 'year') start.setFullYear(end.getFullYear() - 1);
 
     for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
         dates.push(new Date(d).toISOString().slice(0, 10));
@@ -366,59 +358,71 @@ function getDatesInPeriod(period) {
 
 function renderStats() {
     const dates = getDatesInPeriod(currentPeriod);
+    const summary = document.getElementById('stats-summary');
 
-    const habitData = dates.map(date => 
-        habits.filter(h => h.completions && h.completions.includes(date)).length
-    );
+    if (habits.length === 0 && tasks.length === 0) {
+        summary.innerHTML = 'Нет данных для отображения.<br>Добавьте привычки или задачи.';
+        if (habitsChart) habitsChart.destroy();
+        if (tasksChart) tasksChart.destroy();
+        if (pieChart) pieChart.destroy();
+        return;
+    }
 
-    const taskData = dates.map(date => 
-        tasks.filter(t => t.completions && t.completions.includes(date)).length
-    );
+    const completedHabits = dates.map(date => habits.filter(h => h.completions?.includes(date)).length);
+    const missedHabits = completedHabits.map(c => habits.length - c);
 
-    const labels = dates.map(d => {
-        const date = new Date(d);
-        return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
-    });
+    const completedTasks = dates.map(date => tasks.filter(t => t.completions?.includes(date)).length);
+    const missedTasks = completedTasks.map(c => tasks.length - c);
 
-    const totalPossibleHabits = habits.length * dates.length;
-    const totalCompletedHabits = habitData.reduce((a, b) => a + b, 0);
-    const completionRate = totalPossibleHabits > 0 ? Math.round(totalCompletedHabits / totalPossibleHabits * 100) : 0;
+    const labels = dates.map(d => new Date(d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }));
 
-    document.getElementById('stats-summary').innerText = 
-        `Привычки: ${totalCompletedHabits} / ${totalPossibleHabits} (${completionRate}%) за период`;
+    const totalHabits = habits.length * dates.length;
+    const doneHabits = completedHabits.reduce((a, b) => a + b, 0);
+    const habitPct = totalHabits ? Math.round(doneHabits / totalHabits * 100) : 0;
 
-    // График привычек
+    const totalTasks = tasks.length * dates.length;
+    const doneTasks = completedTasks.reduce((a, b) => a + b, 0);
+    const taskPct = totalTasks ? Math.round(doneTasks / totalTasks * 100) : 0;
+
+    summary.innerHTML = `
+        <strong>Привычки:</strong> ${doneHabits} / ${totalHabits} (${habitPct}%)<br>
+        <strong>Задачи:</strong> ${doneTasks} / ${totalTasks} (${taskPct}%)
+    `;
+
+    // Привычки — stacked bar
     if (habitsChart) habitsChart.destroy();
-    habitsChart = new Chart(document.getElementById('habits-line-chart'), {
-        type: 'line',
+    habitsChart = new Chart(document.getElementById('habits-bar-chart'), {
+        type: 'bar',
         data: {
             labels: labels,
-            datasets: [{
-                label: 'Привычки',
-                data: habitData,
-                borderColor: '#4285f4',
-                backgroundColor: 'rgba(66, 133, 244, 0.2)',
-                tension: 0.3
-            }]
+            datasets: [
+                { label: 'Выполнено', data: completedHabits, backgroundColor: '#4285f4' },
+                { label: 'Пропущено', data: missedHabits, backgroundColor: '#ea4335' }
+            ]
         },
-        options: { responsive: true, plugins: { legend: { display: false } } }
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'bottom' } },
+            scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } }
+        }
     });
 
-    // График задач
+    // Задачи — stacked bar
     if (tasksChart) tasksChart.destroy();
-    tasksChart = new Chart(document.getElementById('tasks-line-chart'), {
-        type: 'line',
+    tasksChart = new Chart(document.getElementById('tasks-bar-chart'), {
+        type: 'bar',
         data: {
             labels: labels,
-            datasets: [{
-                label: 'Задачи',
-                data: taskData,
-                borderColor: '#34a853',
-                backgroundColor: 'rgba(52, 168, 83, 0.2)',
-                tension: 0.3
-            }]
+            datasets: [
+                { label: 'Выполнено', data: completedTasks, backgroundColor: '#34a853' },
+                { label: 'Пропущено', data: missedTasks, backgroundColor: '#ea4335' }
+            ]
         },
-        options: { responsive: true, plugins: { legend: { display: false } } }
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'bottom' } },
+            scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } }
+        }
     });
 
     // Круговая диаграмма привычек
@@ -428,7 +432,7 @@ function renderStats() {
         data: {
             labels: ['Выполнено', 'Пропущено'],
             datasets: [{
-                data: [totalCompletedHabits, totalPossibleHabits - totalCompletedHabits],
+                data: [doneHabits, totalHabits - doneHabits],
                 backgroundColor: ['#4285f4', '#ea4335']
             }]
         },

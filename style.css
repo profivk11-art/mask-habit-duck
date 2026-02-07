@@ -238,8 +238,9 @@ li {
     font-size: 12px;
     color: var(--text);
     min-width: 80px;
-    cursor: pointer;
+    cursor: pointer; /* уже было, но на всякий */
     transition: all 0.2s;
+    touch-action: manipulation; /* важно для мобильных и Telegram */
 }
 
 .tab.active { 
@@ -298,4 +299,10 @@ canvas {
     padding: 10px;
     margin: 20px;
     box-shadow: 0 4px 12px var(--shadow);
+}
+.chart-title {
+    text-align: center;
+    font-size: 18px;
+    margin: 30px 0 10px;
+    color: var(--text);
 }
