@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASK Habit Duck</title>
+    
+    <!-- Подключаем Telegram Web App -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <!-- Стили -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Заголовок и маскот -->
+        <header>
+            <h1>MASK Habit Duck 🦆</h1>
+            <div class="mascot" id="mascot-happy">🦆</div>
+            <div id="today-date"></div>
+        </header>
+
+        <!-- Прогресс за сегодня -->
+        <div class="progress-section">
+            <div id="progress-text">0 из 0 выполнено</div>
+            <div class="progress-bar">
+                <div id="progress-fill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Кнопка добавления привычки -->
+        <button id="add-habit-btn" class="main-button">+ Добавить привычку</button>
+
+        <!-- Список привычек -->
+        <ul id="habits-list"></ul>
+
+        <!-- Нижняя навигация (в будущем добавим вкладки: день/неделя/месяц/год) -->
+        <div class="tabs">
+            <button class="tab active" data-period="day">Сегодня</button>
+            <button class="tab" data-period="week">Неделя</button>
+            <button class="tab" data-period="month">Месяц</button>
+            <button class="tab" data-period="year">Год</button>
+        </div>
+    </div>
+
+    <!-- Подключаем логику -->
+    <script src="app.js"></script>
+</body>
+</html>
