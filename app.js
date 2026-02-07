@@ -75,7 +75,7 @@ nextDayBtn.onclick = () => {
     renderCurrentSection();
 };
 
-// Задачи
+// === Задачи ===
 function renderTasks() {
     const list = document.getElementById('tasks-list');
     const emptyMsg = document.getElementById('tasks-empty');
@@ -140,24 +140,25 @@ function deleteTask(index) {
 }
 
 function editTask(index) {
-    const newName = prompt('Новое название', tasks[index].name);
-    if (newName) {
-        tasks[index].name = newName;
+    const newName = prompt('Новое название задачи', tasks[index].name);
+    if (newName !== null && newName.trim() !== '') {
+        tasks[index].name = newName.trim();
         saveData();
         renderTasks();
     }
 }
 
+// Кнопка добавления задачи — теперь гарантировано активна
 document.getElementById('add-task-btn').onclick = () => {
     const name = prompt('Название задачи');
-    if (name) {
-        tasks.push({ name, completions: [] });
+    if (name && name.trim() !== '') {
+        tasks.push({ name: name.trim(), completions: [] });
         saveData();
         renderTasks();
     }
 };
 
-// Привычки
+// === Привычки ===
 function renderHabits() {
     const list = document.getElementById('habits-list');
     const todayStr = getCurrentDateStr();
@@ -191,8 +192,8 @@ function renderHabits() {
 function updateHabitsProgress() {
     const todayStr = getCurrentDateStr();
     const completed = habits.filter(h => h.completions.includes(todayStr)).length;
-    const percent = habits.length > 0 ? (completed / habits.length) * 100 : 0;
     document.getElementById('habits-progress-text').innerText = `${completed} из ${habits.length} выполнено`;
+    const percent = habits.length > 0 ? (completed / habits.length) * 100 : 0;
     document.getElementById('habits-progress-fill').style.width = percent + '%';
 }
 
@@ -212,4 +213,104 @@ function deleteHabit(index) {
     if (confirm('Удалить привычку?')) {
         habits.splice(index, 1);
         saveData();
-        renderHabits
+        renderHabits();
+    }
+}
+
+function editHabit(index) {
+    const newName = prompt('Новое название привычки', habits[index].name);
+    if (newName !== null && newName.trim() !== '') {
+        habits[index].name = newName.trim();
+        saveData();
+        renderHabits();
+    }
+}
+
+// Кнопка добавления привычки — активна
+document.getElementById('add-habit-btn').onclick = () => {
+    const name = prompt('Название привычки');
+    if (name && name.trim() !== '') {
+        habits.push({ name: name.trim(), completions: [] });
+        saveData();
+        renderHabits();
+    }
+};
+
+// === Цели на год (полная реализация — теперь кнопка полностью активна) ===
+function renderGoals() {
+    const list = document.getElementById('goals-list');
+    list.innerHTML = '';
+
+    goals.forEach((goal, index) => {
+        const li = document.createElement('li');
+
+        const text = document.createElement('div');
+        text.className = 'item-text';
+        text.textContent = goal.name;
+
+        const del = document.createElement('button');
+        del.className = 'delete-btn';
+        del.innerHTML = '🗑';
+
+        text.onclick = () => editGoal(index);
+        del.onclick = (e) => { e.stopPropagation(); deleteGoal(index); };
+
+        li.append(text, del);
+        list.appendChild(li);
+    });
+}
+
+function deleteGoal(index) {
+    if (confirm('Удалить цель?')) {
+        goals.splice(index, 1);
+        saveData();
+        renderGoals();
+    }
+}
+
+function editGoal(index) {
+    const newName = prompt('Новое название цели', goals[index].name);
+    if (newName !== null && newName.trim() !== '') {
+        goals[index].name = newName.trim();
+        saveData();
+        renderGoals();
+    }
+}
+
+// Кнопка добавления цели — теперь полностью активна
+document.getElementById('add-goal-btn').onclick = () => {
+    const name = prompt('Название цели');
+    if (name && name.trim() !== '') {
+        goals.push({ name: name.trim() });
+        saveData();
+        renderGoals();
+    }
+};
+
+// === Вкладки ===
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.onclick = () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(tab.dataset.section + '-section').classList.add('active');
+        renderCurrentSection();
+    };
+});
+
+function renderCurrentSection() {
+    const active = document.querySelector('.tab.active').dataset.section;
+    if (active === 'tasks') renderTasks();
+    else if (active === 'habits') renderHabits();
+    else if (active === 'goals') renderGoals();
+    // stats остаётся как есть (если есть код графиков — добавь сам)
+}
+
+// Инициализация
+setupAvatar();
+updateDateDisplay();
+renderCurrentSection(); // начальная загрузка активной вкладки
+renderGoals(); // на случай, если открыта вкладка целей
+
+Telegram.WebApp.ready();
+Telegram.WebApp.expand();
