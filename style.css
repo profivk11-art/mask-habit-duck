@@ -13,10 +13,10 @@ body.dark {
     --bg-gradient: linear-gradient(to bottom, #121212, #1e1e1e);
     --text: #e0e0e0;
     --card-bg: #2d2d2d;
-    --accent: #8ab4f8;
-    --progress: #8ab4f8;
+    --accent: #4285f4; /* ярко-синий даже в тёмной теме, как на скриншоте */
+    --progress: #4285f4;
     --shadow: rgba(0,0,0,0.4);
-    --tab-bg: #2d2d2d;
+    --tab-bg: #1e1e1e;
     --tab-text: #aaa;
 }
 
@@ -33,16 +33,17 @@ body {
 .container { 
     max-width: 480px; 
     margin: 0 auto; 
-    padding: 20px 20px env(safe-area-inset-bottom); /* адаптация под смартфоны */
+    padding: 0 20px env(safe-area-inset-bottom);
     display: flex; 
     flex-direction: column; 
     height: 100dvh; 
     box-sizing: border-box; 
+    position: relative; /* для фиксированных табов */
 }
 
 header { 
     text-align: center; 
-    margin-bottom: 10px; 
+    padding: 10px 0;
 }
 
 .header-top { 
@@ -53,9 +54,9 @@ header {
 }
 
 h1 { 
-    font-size: 22px; 
+    font-size: 20px; 
     color: var(--accent); 
-    margin: 10px 0; 
+    margin: 0; 
     flex: 1; 
     text-align: center; 
     margin-left: -50px; 
@@ -64,13 +65,13 @@ h1 {
 #theme-toggle { 
     background: none; 
     border: none; 
-    font-size: 28px; 
+    font-size: 26px; 
     cursor: pointer; 
 }
 
 .avatar {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     object-fit: cover;
     margin-left: 10px;
@@ -80,50 +81,51 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 40px; /* больше места для touch на смартфонах */
-    margin: 20px 0;
-    font-size: 19px;
+    gap: 30px;
+    margin: 15px 0;
+    font-size: 17px;
     color: var(--text);
     font-weight: bold;
 }
 
 #current-date-display {
-    min-width: 180px;
+    min-width: 160px;
     text-align: center;
 }
 
 .date-btn {
     background: none;
     border: none;
-    font-size: 32px; /* крупнее для touch */
+    font-size: 28px;
     cursor: pointer;
     padding: 10px;
+    color: var(--accent); /* синие стрелки как на скриншоте */
 }
 
 .card {
     background: var(--card-bg);
-    border-radius: 40px;
-    padding: 50px 30px;
-    box-shadow: 0 10px 30px var(--shadow);
+    border-radius: 30px; /* чуть меньше */
+    padding: 30px 20px; /* сильно уменьшил отступы */
+    box-shadow: 0 8px 20px var(--shadow);
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 90%;
     max-width: 360px;
-    margin: 20px auto;
+    margin: 10px auto;
 }
 
 #tasks-progress-big {
-    font-size: 48px;
+    font-size: 36px; /* уменьшил с 48px */
     font-weight: bold;
     color: var(--text);
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .empty-message {
-    font-size: 22px;
+    font-size: 18px; /* уменьшил */
     color: #999;
-    margin: 20px 0 0;
+    margin: 10px 0 0;
     text-align: center;
 }
 
@@ -133,26 +135,27 @@ h1 {
     align-items: center;
     justify-content: flex-start;
     flex-grow: 1;
-    padding: 20px 0;
+    padding: 10px 0;
+    overflow-y: auto; /* только этот блок скроллится */
 }
 
 .main-button.big {
     background: var(--accent);
     color: white;
-    font-size: 20px;
-    padding: 18px 50px;
+    font-size: 18px;
+    padding: 14px 40px; /* уменьшил */
     border: none;
     border-radius: 50px;
-    margin: 20px 0 40px;
+    margin: 15px 0 20px;
     cursor: pointer;
     box-shadow: 0 4px 10px var(--shadow);
-    min-height: 56px; /* лучше для touch */
+    min-height: 50px;
 }
 
 #tasks-list, #habits-list, #goals-list {
     width: 90%;
     max-width: 400px;
-    margin-top: 10px;
+    margin-top: 0;
 }
 
 ul { 
@@ -163,69 +166,50 @@ ul {
 
 li {
     background: var(--card-bg);
-    border-radius: 16px;
-    padding: 20px; /* больше для touch */
-    margin-bottom: 12px;
-    box-shadow: 0 2px 8px var(--shadow);
+    border-radius: 14px;
+    padding: 14px 16px; /* уменьшил padding */
+    margin-bottom: 10px;
+    box-shadow: 0 2px 6px var(--shadow);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 60px;
-}
-
-li.completed .item-text {
-    text-decoration: line-through;
-    opacity: 0.6;
+    min-height: 50px; /* уменьшил */
 }
 
 .item-text { 
-    font-size: 18px; 
-    text-align: center; 
+    font-size: 17px; /* чуть меньше */
     flex: 1; 
 }
 
 .task-checkbox, .habit-checkbox {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: 3px solid #666;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-}
-
-.task-checkbox.checked, .habit-checkbox.checked {
-    background: var(--progress);
-    border-color: var(--progress);
 }
 
 .task-checkbox.checked::after, .habit-checkbox.checked::after {
-    content: '✓';
-    color: white;
-    font-size: 28px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    font-size: 24px;
 }
 
 .delete-btn {
-    background: none;
-    border: none;
-    color: #ff4444;
-    font-size: 28px;
-    cursor: pointer;
-    padding: 10px;
+    font-size: 24px;
+    padding: 8px;
 }
 
+/* Фиксированные табы внизу — всегда видны */
 .tabs { 
-    display: flex; 
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 480px;
+    margin: 0 auto;
     background: var(--tab-bg); 
-    border-radius: 16px; 
-    padding: 8px; 
-    box-shadow: 0 4px 12px var(--shadow); 
-    margin-top: auto; 
-    padding-bottom: env(safe-area-inset-bottom);
+    border-radius: 16px 16px 0 0;
+    padding: 8px 20px env(safe-area-inset-bottom);
+    box-shadow: 0 -4px 12px var(--shadow); 
+    z-index: 10;
 }
 
 .tab { 
@@ -233,15 +217,9 @@ li.completed .item-text {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    padding: 12px; /* больше для touch */
-    border: none; 
-    background: transparent; 
-    font-size: 13px; 
-    color: var(--tab-text); 
-    cursor: pointer; 
-    border-radius: 12px; 
-    transition: all 0.2s; 
+    gap: 6px;
+    padding: 10px;
+    font-size: 12px;
 }
 
 .tab.active { 
@@ -253,7 +231,8 @@ li.completed .item-text {
     display: none; 
     flex-direction: column; 
     flex-grow: 1; 
-    overflow-y: auto; 
+    overflow-y: hidden; /* основной скролл только в tasks-center */
+    padding-bottom: 80px; /* место под фиксированные табы */
 }
 
 .section.active { 
