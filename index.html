@@ -12,7 +12,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- Шапка с темой и датой -->
         <header>
             <div class="header-top">
                 <h1>MASK Habit Duck 🦆</h1>
@@ -22,7 +21,6 @@
             <div class="mascot" id="mascot">🦆</div>
         </header>
 
-        <!-- Основной контент -->
         <main id="main-content">
             <!-- Привычки -->
             <section id="habits-section" class="section active">
@@ -50,20 +48,24 @@
 
             <!-- Цели на год -->
             <section id="goals-section" class="section">
-                <h2>Цели на год</h2>
+                <div class="progress-section">
+                    <h2>Цели на год</h2>
+                </div>
                 <button id="add-goal-btn" class="main-button">+ Добавить цель</button>
                 <ul id="goals-list"></ul>
             </section>
 
             <!-- Аналитика -->
             <section id="stats-section" class="section">
-                <h2>Аналитика</h2>
-                <div id="stats-content">Статистика появится здесь</div>
-                <canvas id="stats-chart" height="250"></canvas>
+                <div class="progress-section">
+                    <h2>Аналитика</h2>
+                    <div id="stats-summary"></div>
+                </div>
+                <canvas id="habits-pie-chart" height="200"></canvas>
+                <canvas id="habits-line-chart" height="200"></canvas>
             </section>
         </main>
 
-        <!-- Навигация -->
         <div class="tabs">
             <button class="tab active" data-section="habits">Привычки</button>
             <button class="tab" data-section="tasks">Задачи</button>
