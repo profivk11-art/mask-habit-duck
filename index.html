@@ -5,25 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MASK Habit Duck</title>
     
-    <!-- Telegram Web App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
-    <!-- Chart.js для графиков (добавим позже) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <!-- Шапка -->
+        <!-- Шапка с темой и датой -->
         <header>
-            <h1>MASK Habit Duck 🦆</h1>
+            <div class="header-top">
+                <h1>MASK Habit Duck 🦆</h1>
+                <button id="theme-toggle">🌙</button>
+            </div>
             <div id="today-date"></div>
+            <div class="mascot" id="mascot">🦆</div>
         </header>
 
-        <!-- Основной контент (переключается по разделам) -->
+        <!-- Основной контент -->
         <main id="main-content">
-            <!-- Раздел Привычки -->
+            <!-- Привычки -->
             <section id="habits-section" class="section active">
                 <div class="progress-section">
                     <div id="habits-progress-text">0 из 0 выполнено</div>
@@ -35,31 +36,34 @@
                 <ul id="habits-list"></ul>
             </section>
 
-            <!-- Раздел Задачи (пока пустой) -->
+            <!-- Задачи -->
             <section id="tasks-section" class="section">
                 <div class="progress-section">
-                    <div id="tasks-progress-text">Задач пока нет</div>
+                    <div id="tasks-progress-text">0 из 0 выполнено</div>
+                    <div class="progress-bar">
+                        <div id="tasks-progress-fill" style="width: 0%"></div>
+                    </div>
                 </div>
                 <button id="add-task-btn" class="main-button">+ Добавить задачу</button>
                 <ul id="tasks-list"></ul>
             </section>
 
-            <!-- Раздел Цели на год (пока пустой) -->
+            <!-- Цели на год -->
             <section id="goals-section" class="section">
-                <h2>Цели на 2026 год</h2>
+                <h2>Цели на год</h2>
                 <button id="add-goal-btn" class="main-button">+ Добавить цель</button>
                 <ul id="goals-list"></ul>
             </section>
 
-            <!-- Раздел Аналитика (пока пустой) -->
+            <!-- Аналитика -->
             <section id="stats-section" class="section">
                 <h2>Аналитика</h2>
                 <div id="stats-content">Статистика появится здесь</div>
-                <canvas id="stats-chart" height="200"></canvas>
+                <canvas id="stats-chart" height="250"></canvas>
             </section>
         </main>
 
-        <!-- Нижняя навигация -->
+        <!-- Навигация -->
         <div class="tabs">
             <button class="tab active" data-section="habits">Привычки</button>
             <button class="tab" data-section="tasks">Задачи</button>

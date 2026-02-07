@@ -1,10 +1,31 @@
-/* Основные стили (оставляем градиент, но добавим переменные для тёмной темы позже) */
+:root {
+    --bg-gradient: linear-gradient(to bottom, #e8f5e9, #ffffff);
+    --text: #333;
+    --card-bg: white;
+    --accent: #00796b;
+    --progress: #4caf50;
+    --shadow: rgba(0,0,0,0.05);
+    --tab-bg: white;
+    --tab-text: #666;
+}
+
+body.dark {
+    --bg-gradient: linear-gradient(to bottom, #121212, #1e1e1e);
+    --text: #e0e0e0;
+    --card-bg: #2d2d2d;
+    --accent: #00bfa5;
+    --progress: #66bb6a;
+    --shadow: rgba(0,0,0,0.3);
+    --tab-bg: #2d2d2d;
+    --tab-text: #aaa;
+}
+
 body {
     margin: 0;
     padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(to bottom, #e8f5e9, #ffffff);
-    color: #333;
+    background: var(--bg-gradient);
+    color: var(--text);
     min-height: 100vh;
     transition: background 0.3s;
 }
@@ -20,28 +41,32 @@ body {
 }
 
 header { text-align: center; margin-bottom: 20px; }
-h1 { font-size: 24px; color: #00796b; margin: 10px 0; }
+.header-top { display: flex; justify-content: space-between; align-items: center; padding: 0 10px; }
+h1 { font-size: 24px; color: var(--accent); margin: 10px 0; }
 #today-date { font-size: 16px; color: #666; }
+#theme-toggle { background: none; border: none; font-size: 28px; cursor: pointer; }
+
+.mascot { font-size: 100px; margin: 20px 0; transition: all 0.3s; }
 
 .section { display: none; flex-direction: column; flex-grow: 1; overflow-y: auto; }
 .section.active { display: flex; }
 
 .progress-section {
-    background: white;
+    background: var(--card-bg);
     border-radius: 20px;
     padding: 20px;
     margin-bottom: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 12px var(--shadow);
     text-align: center;
 }
 
-.progress-section div { font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #00796b; }
+.progress-section > div { font-size: 20px; font-weight: bold; margin-bottom: 10px; color: var(--accent); }
 
-.progress-bar { height: 12px; background: #e0e0e0; border-radius: 6px; overflow: hidden; }
-#habits-progress-fill { height: 100%; background: #4caf50; width: 0%; transition: width 0.4s ease; }
+.progress-bar { height: 12px; background: #444; border-radius: 6px; overflow: hidden; }
+.progress-bar > div { height: 100%; background: var(--progress); width: 0%; transition: width 0.4s ease; }
 
 .main-button {
-    background: #00796b;
+    background: var(--accent);
     color: white;
     border: none;
     border-radius: 50px;
@@ -50,21 +75,59 @@ h1 { font-size: 24px; color: #00796b; margin: 10px 0; }
     font-weight: bold;
     margin: 20px 0;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px var(--shadow);
 }
 
 ul { list-style: none; padding: 0; margin: 0; flex-grow: 1; overflow-y: auto; }
 li {
-    background: white;
+    background: var(--card-bg);
     border-radius: 16px;
     padding: 16px;
     margin-bottom: 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px var(--shadow);
 }
 
-.tabs { display: flex; background: white; border-radius: 16px; padding: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-top: auto; }
-.tab { flex: 1; padding: 12px; border: none; background: transparent; font-size: 14px; color: #666; cursor: pointer; border-radius: 12px; transition: all 0.2s; }
-.tab.active { background: #00796b; color: white; font-weight: bold; }
+.habit-text, .task-text { flex: 1; font-size: 18px; }
+
+.habit-checkbox, .task-checkbox {
+    width: 32px; height: 32px; border-radius: 50%; border: 3px solid #666; cursor: pointer; transition: all 0.2s;
+}
+
+.habit-checkbox.checked, .task-checkbox.checked {
+    background: var(--progress); border-color: var(--progress);
+    position: relative;
+}
+
+.habit-checkbox.checked::after, .task-checkbox.checked::after {
+    content: '✓'; color: white; font-size: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+
+.tabs {
+    display: flex;
+    background: var(--tab-bg);
+    border-radius: 16px;
+    padding: 8px;
+    box-shadow: 0 4px 12px var(--shadow);
+    margin-top: auto;
+}
+
+.tab {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    color: var(--tab-text);
+    cursor: pointer;
+    border-radius: 12px;
+    transition: all 0.2s;
+}
+
+.tab.active {
+    background: var(--accent);
+    color: white;
+    font-weight: bold;
+}
