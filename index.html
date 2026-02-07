@@ -5,45 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MASK Habit Duck</title>
     
-    <!-- Подключаем Telegram Web App -->
+    <!-- Telegram Web App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
-    <!-- Стили -->
+    <!-- Chart.js для графиков (добавим позже) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <!-- Заголовок и маскот -->
+        <!-- Шапка -->
         <header>
             <h1>MASK Habit Duck 🦆</h1>
-            <div class="mascot" id="mascot-happy">🦆</div>
             <div id="today-date"></div>
         </header>
 
-        <!-- Прогресс за сегодня -->
-        <div class="progress-section">
-            <div id="progress-text">0 из 0 выполнено</div>
-            <div class="progress-bar">
-                <div id="progress-fill" style="width: 0%"></div>
-            </div>
-        </div>
+        <!-- Основной контент (переключается по разделам) -->
+        <main id="main-content">
+            <!-- Раздел Привычки -->
+            <section id="habits-section" class="section active">
+                <div class="progress-section">
+                    <div id="habits-progress-text">0 из 0 выполнено</div>
+                    <div class="progress-bar">
+                        <div id="habits-progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <button id="add-habit-btn" class="main-button">+ Добавить привычку</button>
+                <ul id="habits-list"></ul>
+            </section>
 
-        <!-- Кнопка добавления привычки -->
-        <button id="add-habit-btn" class="main-button">+ Добавить привычку</button>
+            <!-- Раздел Задачи (пока пустой) -->
+            <section id="tasks-section" class="section">
+                <div class="progress-section">
+                    <div id="tasks-progress-text">Задач пока нет</div>
+                </div>
+                <button id="add-task-btn" class="main-button">+ Добавить задачу</button>
+                <ul id="tasks-list"></ul>
+            </section>
 
-        <!-- Список привычек -->
-        <ul id="habits-list"></ul>
+            <!-- Раздел Цели на год (пока пустой) -->
+            <section id="goals-section" class="section">
+                <h2>Цели на 2026 год</h2>
+                <button id="add-goal-btn" class="main-button">+ Добавить цель</button>
+                <ul id="goals-list"></ul>
+            </section>
 
-        <!-- Нижняя навигация (в будущем добавим вкладки: день/неделя/месяц/год) -->
+            <!-- Раздел Аналитика (пока пустой) -->
+            <section id="stats-section" class="section">
+                <h2>Аналитика</h2>
+                <div id="stats-content">Статистика появится здесь</div>
+                <canvas id="stats-chart" height="200"></canvas>
+            </section>
+        </main>
+
+        <!-- Нижняя навигация -->
         <div class="tabs">
-            <button class="tab active" data-period="day">Сегодня</button>
-            <button class="tab" data-period="week">Неделя</button>
-            <button class="tab" data-period="month">Месяц</button>
-            <button class="tab" data-period="year">Год</button>
+            <button class="tab active" data-section="habits">Привычки</button>
+            <button class="tab" data-section="tasks">Задачи</button>
+            <button class="tab" data-section="goals">Цели</button>
+            <button class="tab" data-section="stats">Аналитика</button>
         </div>
     </div>
 
-    <!-- Подключаем логику -->
     <script src="app.js"></script>
 </body>
 </html>
