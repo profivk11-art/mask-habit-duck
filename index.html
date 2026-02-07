@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MASK Habit Duck</title>
+    <title>MASK HABIT</title>
     
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -14,16 +14,35 @@
     <div class="container">
         <header>
             <div class="header-top">
-                <h1>MASK Habit Duck 🦆</h1>
+                <img id="user-avatar" class="avatar" src="https://via.placeholder.com/40/4285f4/ffffff?text=M" alt="Avatar">
+                <h1>MASK HABIT</h1>
                 <button id="theme-toggle">🌙</button>
             </div>
-            <div id="today-date"></div>
-            <div class="mascot" id="mascot">🦆</div>
+            <div class="date-nav">
+                <button id="prev-day" class="date-btn">◀</button>
+                <span id="current-date-display">Сегодня</span>
+                <button id="next-day" class="date-btn">▶</button>
+                <button id="calendar-btn" class="date-btn">📅</button>
+            </div>
         </header>
 
+        <input type="date" id="date-picker" style="display: none;">
+
         <main id="main-content">
+            <!-- Задачи (главная вкладка) -->
+            <section id="tasks-section" class="section active">
+                <div class="tasks-center">
+                    <div class="card" id="tasks-card">
+                        <div id="tasks-progress-big">0 / 0</div>
+                        <div id="tasks-empty" class="empty-message">На сегодня задач нет</div>
+                    </div>
+                    <button id="add-task-btn" class="main-button big">+ Добавить задачу</button>
+                    <ul id="tasks-list"></ul>
+                </div>
+            </section>
+
             <!-- Привычки -->
-            <section id="habits-section" class="section active">
+            <section id="habits-section" class="section">
                 <div class="progress-section">
                     <div id="habits-progress-text">0 из 0 выполнено</div>
                     <div class="progress-bar">
@@ -32,18 +51,6 @@
                 </div>
                 <button id="add-habit-btn" class="main-button">+ Добавить привычку</button>
                 <ul id="habits-list"></ul>
-            </section>
-
-            <!-- Задачи -->
-            <section id="tasks-section" class="section">
-                <div class="progress-section">
-                    <div id="tasks-progress-text">0 из 0 выполнено</div>
-                    <div class="progress-bar">
-                        <div id="tasks-progress-fill" style="width: 0%"></div>
-                    </div>
-                </div>
-                <button id="add-task-btn" class="main-button">+ Добавить задачу</button>
-                <ul id="tasks-list"></ul>
             </section>
 
             <!-- Цели на год -->
@@ -67,10 +74,10 @@
         </main>
 
         <div class="tabs">
-            <button class="tab active" data-section="habits">Привычки</button>
-            <button class="tab" data-section="tasks">Задачи</button>
-            <button class="tab" data-section="goals">Цели</button>
-            <button class="tab" data-section="stats">Аналитика</button>
+            <button class="tab active" data-section="tasks">📝 Задачи</button>
+            <button class="tab" data-section="habits">✔️ Привычки</button>
+            <button class="tab" data-section="goals">🎯 Цели на год</button>
+            <button class="tab" data-section="stats">📊 Аналитика</button>
         </div>
     </div>
 
