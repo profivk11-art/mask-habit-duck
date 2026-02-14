@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Telegram Habits Bot</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--tg-theme-header-bg-color, #2481cc);
+        }
+
+        .add-habit-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--tg-theme-hint-color, #cccccc);
+            border-radius: 8px;
+            background-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
+            color: var(--tg-theme-text-color, #000000);
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--tg-theme-button-color, #2481cc);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:active {
+            background-color: var(--tg-theme-button-color, #2481cc);
+            opacity: 0.8;
+        }
+
+        .habits-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .habit-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .habit-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .habit-checkbox {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--tg-theme-button-color, #2481cc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .habit-checkbox.completed {
+            background-color: var(--tg-theme-button-color, #2481cc);
+        }
+
+        .habit-checkbox.completed::after {
+            content: '✓';
+            color: var(--tg-theme-button-text-color, #ffffff);
+        }
+
+        .habit-name {
+            flex: 1;
+        }
+
+        .habit-name.completed {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        .habit-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .delete-btn {
+            background-color: var(--tg-theme-destructive-text-color, #ff5959);
+            color: white;
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        .statistics {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
+            border-radius: 8px;
+        }
+
+        .statistics h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: var(--tg-theme-hint-color, #cccccc);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--tg-theme-button-color, #2481cc);
+            transition: width 0.3s;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: var(--tg-theme-hint-color, #999999);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Мои привычки</h1>
+
+        <div class="add-habit-form">
+            <input type="text" id="habitInput" placeholder="Название привычки...">
+            <button id="addHabitBtn">Добавить</button>
+        </div>
+
+        <div class="habits-list" id="habitsList">
+            <div class="empty-state">У вас пока нет привычек. Добавьте первую!</div>
+        </div>
+
+        <div class="statistics">
+            <h2>📈 Статистика</h2>
+            <div class="stat-item">
+                <span>Всего привычек:</span>
+                <span id="totalHabits">0</span>
+            </div>
+            <div class="stat-item">
+                <span>Выполнено:</span>
+                <span id="completedHabits">0</span>
+            </div>
+            <div class="stat-item">
+                <span>Прогресс:</span>
+                <span id="progressPercentage">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация Telegram Web App
+        const tg = window.Telegram.WebApp;
+
+        // Расширяем на весь экран
+        tg.expand();
+
+        // Получаем user_id из Telegram Web App
+        const userId = tg.initDataUnsafe?.user?.id || 'default_user';
+
+        // Базовый URL API
+        const apiBaseUrl = window.location.origin;
+
+        // Загрузка привычек при запуске
+        document.addEventListener('DOMContentLoaded', loadHabits);
+
+        // Обработчик кнопки добавления привычки
+        document.getElementById('addHabitBtn').addEventListener('click', addHabit);
+        document.getElementById('habitInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addHabit();
+        });
+
+        // Функция для загрузки привычек
+        async function loadHabits() {
+            try {
+                const response = await fetch(`${apiBaseUrl}/api/habits?user_id=${userId}`);
+                const data = await response.json();
+                renderHabits(data.habits);
+                updateStatistics();
+            } catch (error) {
+                console.error('Ошибка при загрузке привычек:', error);
+                tg.showAlert('Не удалось загрузить привычки. Попробуйте позже.');
+            }
+        }
+
+        // Функция для добавления привычки
+        async function addHabit() {
+            const habitInput = document.getElementById('habitInput');
+            const habitName = habitInput.value.trim();
+
+            if (!habitName) {
+                tg.showAlert('Введите название привычки');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${apiBaseUrl}/api/add-habit`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        habit_name: habitName
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    habitInput.value = '';
+                    loadHabits();
+                } else {
+                    tg.showAlert('Не удалось добавить привычку');
+                }
+            } catch (error) {
+                console.error('Ошибка при добавлении привычки:', error);
+                tg.showAlert('Не удалось добавить привычку. Попробуйте позже.');
+            }
+        }
+
+        // Функция для отображения привычек
+        function renderHabits(habits) {
+            const habitsList = document.getElementById('habitsList');
+
+            if (habits.length === 0) {
+                habitsList.innerHTML = '<div class="empty-state">У вас пока нет привычек. Добавьте первую!</div>';
+                return;
+            }
+
+            habitsList.innerHTML = habits.map(habit => `
+                <div class="habit-item">
+                    <div class="habit-info">
+                        <div class="habit-checkbox ${habit.completed ? 'completed' : ''}" 
+                             onclick="toggleHabit(${habit.id})"></div>
+                        <div class="habit-name ${habit.completed ? 'completed' : ''}">${habit.name}</div>
+                    </div>
+                    <div class="habit-actions">
+                        <button class="delete-btn" onclick="deleteHabit(${habit.id})">Удалить</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Функция для переключения статуса привычки
+        async function toggleHabit(habitId) {
+            try {
+                const response = await fetch(`${apiBaseUrl}/api/mark-completed`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        habit_id: habitId
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    loadHabits();
+                } else {
+                    tg.showAlert('Не удалось обновить статус привычки');
+                }
+            } catch (error) {
+                console.error('Ошибка при обновлении статуса привычки:', error);
+                tg.showAlert('Не удалось обновить статус привычки. Попробуйте позже.');
+            }
+        }
+
+        // Функция для удаления привычки
+        async function deleteHabit(habitId) {
+            if (!confirm('Вы уверены, что хотите удалить эту привычку?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${apiBaseUrl}/api/delete-habit`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        habit_id: habitId
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    loadHabits();
+                } else {
+                    tg.showAlert('Не удалось удалить привычку');
+                }
+            } catch (error) {
+                console.error('Ошибка при удалении привычки:', error);
+                tg.showAlert('Не удалось удалить привычку. Попробуйте позже.');
+            }
+        }
+
+        // Функция для обновления статистики
+        async function updateStatistics() {
+            try {
+                const response = await fetch(`${apiBaseUrl}/api/statistics?user_id=${userId}`);
+                const data = await response.json();
+
+                document.getElementById('totalHabits').textContent = data.total;
+                document.getElementById('completedHabits').textContent = data.completed;
+                document.getElementById('progressPercentage').textContent = `${data.percentage}%`;
+                document.getElementById('progressBar').style.width = `${data.percentage}%`;
+            } catch (error) {
+                console.error('Ошибка при загрузке статистики:', error);
+            }
+        }
+    </script>
+</body>
+</html>
